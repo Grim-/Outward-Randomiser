@@ -1,0 +1,57 @@
+﻿
+
+
+                //if (itemToUpdate != null)
+                //{
+                //    Debug.Log("Reinit Item " + itemToUpdate.Name);
+
+                //    EquipmentStats itemEquipStats = itemToUpdate.GetComponent<EquipmentStats>();
+
+                //    //Debug.Log(itemEquipStats.ManaUseModifier);
+                //    foreach (var thisModification in itemMods)
+                //    {
+                //        var modifyVar = thisModification.Value["mod_var"];
+                //        var modifyValue = thisModification.Value["mod_value"];
+                //        var modifyVarType = (ArmourModType)Enum.Parse(typeof(ArmourModType), thisModification.Value["mod_value_type"], true);
+
+
+                //        Debug.Log(modifyVarType);
+                //        switch (modifyVarType)
+                //        {
+                //            case ArmourModType.SPEED:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                break;
+                //            case ArmourModType.HEALTH_BONUS:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                break;
+                //            case ArmourModType.POUCH_BONUS:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                break;
+                //            case ArmourModType.HEAT_PROTECTION:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                break;
+                //            case ArmourModType.COLD_PROTECTION:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                break;
+                //            case ArmourModType.IMPACT_PROTECTION:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                break;
+                //            case ArmourModType.CORRUPTION_PROTECTION:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                break;
+                //            case ArmourModType.WATER_PROOF:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                break;
+                //            case ArmourModType.MANA_USE_MODIFIER:
+                //                outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                //                //Debug.Log("Setting UID : " + itemToUpdate.DisplayName + " to " + modifyValue.AsFloat  + "Mana something bonus");
+                //                //outwardUTILS.ReflectionSetValue<float>(typeof(EquipmentStats), item, modifyVar, modifyValue.AsFloat);
+                //            break;
+                //        }
+                        
+                //    }
+                //}
+                //else
+                //{
+                //    Debug.Log("Item instance not found");
+                //}
