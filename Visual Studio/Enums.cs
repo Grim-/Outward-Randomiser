@@ -12,6 +12,7 @@ namespace RandomItemStats
         ARMOR
     }
 
+    //ARMOURBASE_DATA or EQUIPMENTSTATS
     public enum ArmourModType
     {
         SPEED,
@@ -19,16 +20,28 @@ namespace RandomItemStats
         POUCH_BONUS,
         HEAT_PROTECTION,
         COLD_PROTECTION,
-        IMPACT_PROTECTION,
-        CORRUPTION_PROTECTION,
+        DAMAGE_PROTECTION,
+        DAMAGE_RESISTANCE,
+        STAMINA_USE_MODIFIER,
         WATER_PROOF,
+        DURABILITY,
+        WEIGHT,
         MANA_USE_MODIFIER,
         COUNT
     }
-
+    //WEAPONBASEDATA
+    //DAMAGE,
+    //SPEED,
+    //REACH,
+    //IMPACT,
+    //DURA
+    //
+    //COUNT
     public enum WeaponModType
     {
         DAMAGE,
+        IMPACT,
+        DURABILITY,
         SPEED,
         REACH,
         COUNT
@@ -42,6 +55,16 @@ namespace RandomItemStats
         Electric,
         Frost,
         Fire,
+        COUNT
+    }
+
+
+    public enum RollQuality
+    {
+        UNCOMMON,
+        RARE,
+        EPIC,
+        LEGENDARY,
         COUNT
     }
 }

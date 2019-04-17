@@ -44,41 +44,8 @@ namespace RandomItemStats
 
         public void LoadItemDB()
         {
-            string json = File.ReadAllText(itemDB_location);
-            itemDB = JSON.Parse(json);
+            JDBHelper.LoadItemDB();
         }
-
-        public JSONNode LoadItemDBSetCharacter(string characterUID)
-        {
-            Debug.Log("Loading Item DB and Setting Current Character");
-            string json = File.ReadAllText(itemDB_location);
-            itemDB = JSON.Parse(json);
-            var chara = JDBHelpers.SetCurrentCharacter(itemDB, characterUID);
-            SaveItemDB();
-            return chara;
-        }
-
-        public void AddItemToDB(JSONNode currentCharacter, ItemMod itemMod)
-        {
-            var newItemObject = new JSONObject();
-            var newItemModArray = new JSONArray();
-
-            newItemObject.Add("item_UID", itemMod.item.UID);
-            newItemObject.Add("item_type", itemMod.itemType.ToString());
-            currentCharacter["items"][-1] = newItemObject;
-            var newModObj = new JSONObject();
-
-            foreach (var mod in itemMod.mods)
-            {
-                
-                newModObj.Add(mod.Key, mod.Value);
-                
-            }
-            newItemModArray.Add(newModObj);
-            newItemObject.Add("modifications", newItemModArray);
-            SaveItemDB();
-        }
-
 
         public void ReInitaliseRandomisedItems(JSONNode currentCharacter, ItemManager itemMan)
         {
@@ -118,7 +85,6 @@ namespace RandomItemStats
 
                 EquipmentStats itemEquipStats = item.GetComponent<EquipmentStats>();
 
-                //Debug.Log(itemEquipStats.ManaUseModifier);
                 foreach (var thisModification in itemMods)
                 {
                     var modifyVar = thisModification.Value["mod_var"];
@@ -144,11 +110,11 @@ namespace RandomItemStats
                         case ArmourModType.COLD_PROTECTION:
                             outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
                             break;
-                        case ArmourModType.IMPACT_PROTECTION:
-                            outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                        case ArmourModType.DAMAGE_RESISTANCE:                           
+                           // outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
                             break;
-                        case ArmourModType.CORRUPTION_PROTECTION:
-                            outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                        case ArmourModType.DAMAGE_PROTECTION:
+                            //outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
                             break;
                         case ArmourModType.WATER_PROOF:
                             outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
@@ -168,27 +134,4 @@ namespace RandomItemStats
 
         }
     }
-
-
-    public class ItemMod
-    {
-        public Item item;
-        public Type itemType;
-        public Dictionary<string, string> mods;
-
-        public ItemMod(Item _item)
-        {
-            item = _item;
-            mods = new Dictionary<string, string>();
-        }
-
-        public void AddMod(string modKey, string modValue)
-        {
-            if (!mods.ContainsKey(modKey))
-            {
-                mods.Add(modKey, modValue);
-            }
-        }
-    }
-
 }

@@ -5,11 +5,64 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 using UnityEngine;
+using System.IO;
 
 namespace RandomItemStats
 {
-    class JDBHelpers
+    public static class JDBHelper
     {
+        private static string itemDB_location = "Mods/RandomItemStats/itemDB.json";
+
+        private static JSONNode itemDB;
+
+
+        private static JSONNode currentCharacterSave;
+
+
+        public static void LoadItemDB()
+        {
+            string json = File.ReadAllText(itemDB_location);
+            itemDB = JSON.Parse(json);
+        }
+
+        public static void SaveItemDB()
+        {
+            File.WriteAllText(itemDB_location, itemDB.ToString());
+        }
+
+        public static void AddItemToDB(JSONNode currentCharacter, ItemMod itemMod)
+        {
+            var newItemObject = new JSONObject();
+            var newItemModArray = new JSONArray();
+
+            Debug.Log("item mod item");
+            Debug.Log(itemMod.item);
+
+            newItemObject.Add("item_UID", itemMod.item.UID);
+            newItemObject.Add("item_type", itemMod.itemType.ToString());
+            currentCharacter["items"][-1] = newItemObject;
+            var newModObj = new JSONObject();
+
+            foreach (var mod in itemMod.mods)
+            {
+
+                newModObj.Add(mod.Key, mod.Value);
+
+            }
+            newItemModArray.Add(newModObj);
+            newItemObject.Add("modifications", newItemModArray);
+            SaveItemDB();
+        }
+
+        public static JSONNode LoadItemDBSetCharacter(string characterUID)
+        {
+            Debug.Log("Loading Item DB and Setting Current Character");
+            string json = File.ReadAllText(itemDB_location);
+            itemDB = JSON.Parse(json);
+            var chara = SetCurrentCharacter(itemDB, characterUID);
+            SaveItemDB();
+            return chara;
+        }
 
         public static JSONNode SetCurrentCharacter(JSONNode node, string playerUID)
         {
@@ -25,6 +78,7 @@ namespace RandomItemStats
                     var charSaveObject = node["characters"][charSaveIndex];
 
                     Debug.Log("Setting as currentCharacter");
+                    currentCharacterSave = charSaveObject;
                     return charSaveObject;
                 }
                 else

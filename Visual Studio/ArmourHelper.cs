@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace RandomItemStats
 {
-    public static class OEquipStatHelper
+    public static class ArmourHelper
     {
-        public static void Update_HealthStat()
+
+        public static void UpdateStaminaModifier()
         {
 
         }
-
     }
 }

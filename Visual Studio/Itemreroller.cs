@@ -9,111 +9,71 @@ namespace RandomItemStats
 {
     static class Itemreroller
     {
-
-        //TODO SPLIT BY ARMOUR / WEAPON, Each has stats the other cant use
-
-        //public static ItemMod ReRollItem(Item item)
-        //{
-        //    //should be 4
-       
         public static ItemMod ReRollArmour(Item item)
         {
             Debug.Log("Rerolling armor");
             int statTypes = (int)ArmourModType.COUNT - 1;
             int rollStatType = UnityEngine.Random.Range(0, statTypes);
-
-
             ArmourModType statTypeEnum = (ArmourModType)rollStatType;
-
             int rollQuality = RollForQuality();
-
-
             Debug.Log("Armor Stat Chosen is " + statTypeEnum.ToString() + " value is " + rollQuality);
+
+            //Component References
             EquipmentStats itemEquipStats = item.GetComponent<EquipmentStats>();
+            ArmorBaseData armorBaseData = item.GetComponent<ArmorBaseData>();
+            ItemStats itemStats = item.GetComponent<ItemStats>();
 
             switch (statTypeEnum)
             {
                 case ArmourModType.HEALTH_BONUS:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_maxHealthBonus", rollQuality);
-                    ItemMod hpMod = new ItemMod(item);
-                    hpMod.itemType = typeof(Armor);
-                    hpMod.AddMod("mod_var", "m_maxHealthBonus");
-                    hpMod.AddMod("mod_value", rollQuality.ToString());
-                    hpMod.AddMod("mod_value_type", "HEALTH_BONUS");
-                    return hpMod;
+                outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_maxHealthBonus", rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_maxHealthBonus", "HEALTH_BONUS");
 
                 case ArmourModType.POUCH_BONUS:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_pouchCapacityBonus", rollQuality);
-                    ItemMod pouchMod = new ItemMod(item);
-                    pouchMod.itemType = typeof(Armor);
-                    pouchMod.AddMod("mod_var", "m_pouchCapacityBonus");
-                    pouchMod.AddMod("mod_value", rollQuality.ToString());
-                    pouchMod.AddMod("mod_value_type", "POUCH_BONUS");
-                    return pouchMod;
+                outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_pouchCapacityBonus", rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_pouchCapacityBonus", "POUCH_BONUS");
 
                 case ArmourModType.HEAT_PROTECTION:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_heatProtection", rollQuality);
-                    ItemMod heatProtMod = new ItemMod(item);
-                    heatProtMod.itemType = typeof(Armor);
-                    heatProtMod.AddMod("mod_var", "m_heatProtection");
-                    heatProtMod.AddMod("mod_value", rollQuality.ToString());
-                    heatProtMod.AddMod("mod_value_type", "HEAT_PROTECTION");
-                    return heatProtMod;
+                outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_heatProtection", rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_heatProtection", "HEAT_PROTECTION");
 
                 case ArmourModType.COLD_PROTECTION:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_coldProtection", rollQuality);
-                    ItemMod coldProtMod = new ItemMod(item);
-                    coldProtMod.itemType = typeof(Armor);
-                    coldProtMod.AddMod("mod_var", "m_coldProtection");
-                    coldProtMod.AddMod("mod_value", rollQuality.ToString());
-                    coldProtMod.AddMod("mod_value_type", "COLD_PROTECTION");
-                    return coldProtMod;
-
-                case ArmourModType.IMPACT_PROTECTION:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_impactResistance", rollQuality);
-                    ItemMod impactProtMod = new ItemMod(item);
-                    impactProtMod.itemType = typeof(Armor);
-                    impactProtMod.AddMod("mod_var", "m_impactResistance");
-                    impactProtMod.AddMod("mod_value", rollQuality.ToString());
-                    impactProtMod.AddMod("mod_value_type", "IMPACT_PROTECTION");
-                    return impactProtMod;
-
-                case ArmourModType.CORRUPTION_PROTECTION:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_corruptionProtection", rollQuality);
-                    ItemMod corruptionProtMod = new ItemMod(item);
-                    corruptionProtMod.itemType = typeof(Armor);
-                    corruptionProtMod.AddMod("mod_var", "m_corruptionProtection");
-                    corruptionProtMod.AddMod("mod_value", rollQuality.ToString());
-                    corruptionProtMod.AddMod("mod_value_type", "CORRUPTION_PROTECTION");
-                    return corruptionProtMod;
+                outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_coldProtection", rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_coldProtection", "COLD_PROTECTION");
 
                 case ArmourModType.WATER_PROOF:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_waterproof", rollQuality);
-                    ItemMod waterProofMod = new ItemMod(item);
-                    waterProofMod.itemType = typeof(Armor);
-                    waterProofMod.AddMod("mod_var", "m_waterproof");
-                    waterProofMod.AddMod("mod_value", rollQuality.ToString());
-                    waterProofMod.AddMod("mod_value_type", "WATER_PROOF");
-                    return waterProofMod;
+                outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_waterproof", rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_waterproof", "WATER_PROOF");
 
                 case ArmourModType.MANA_USE_MODIFIER:
-                    //var currentManaMod = outwardUTILS.ReflectionGetValue<float>(typeof(EquipmentStats), itemEquipStats, "m_manaUseModifier");
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_manaUseModifier", rollQuality * 3);
-                    ItemMod manaMod = new ItemMod(item);
-                    manaMod.itemType = typeof(Armor);
-                    manaMod.AddMod("mod_var", "m_waterproof");
-                    manaMod.AddMod("mod_value", (rollQuality * 3).ToString());
-                    manaMod.AddMod("mod_value_type", "MANA_USE_MODIFIER");
-                    return manaMod;
+                outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_manaUseModifier", rollQuality * 3);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_manaUseModifier", "MANA_USE_MODIFIER");
 
                 case ArmourModType.SPEED:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_movementPenalty", rollQuality);
-                    ItemMod speedMod = new ItemMod(item);
-                    speedMod.itemType = typeof(Armor);
-                    speedMod.AddMod("mod_var", "m_movementPenalty");
-                    speedMod.AddMod("mod_value", rollQuality.ToString());
-                    speedMod.AddMod("mod_value_type", "SPEED");
-                    return speedMod;
+                outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_movementPenalty", rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_movementPenalty", "SPEED");
+
+                case ArmourModType.WEIGHT:
+                outwardUTILS.ReflectionUpdateOrSetFloat(typeof(ItemStats), itemStats, "m_rawWeight", -rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_rawWeight", "WEIGHT");
+
+                case ArmourModType.STAMINA_USE_MODIFIER:
+                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(EquipmentStats), itemEquipStats, "m_staminaUsePenalty", -rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "m_staminaUsePenalty", "STAMINA_USE_MODIFIER");
+
+                case ArmourModType.DAMAGE_PROTECTION:
+                    WeaponModDamageType chosenType = RollForDamageType();
+
+
+                break;
+
+                case ArmourModType.DAMAGE_RESISTANCE:
+
+                break;
+
+                default:
+                    Debug.Log("Unimplemented Type");
+                break;
             }
 
             return null;
@@ -135,25 +95,29 @@ namespace RandomItemStats
 
             int rollQuality = RollForQuality();
             Debug.Log("Weapon Stat Chosen is " + statTypeEnum.ToString() + " value is " + rollQuality);
+
+
             EquipmentStats itemEquipStats = item.GetComponent<EquipmentStats>();
-            WeaponStats weaponEquipStats = item.GetComponent<WeaponStats>();
+            WeaponStats itemWeaponStats = item.GetComponent<WeaponStats>();
+            WeaponBaseData weaponBaseData = item.GetComponent<WeaponBaseData>();
+
 
             Debug.Log("Weapon stats");
-            Debug.Log(weaponEquipStats);
+            Debug.Log(itemWeaponStats);
 
             switch (statTypeEnum)
             {
                 //check the weapon damage type exists first
                 case WeaponModType.DAMAGE:
-                    int rollForDamageTypeCount = (int)WeaponModDamageType.COUNT - 1;
-                    int rollForDamageType = UnityEngine.Random.Range(0, rollForDamageTypeCount);
-                    
-                    WeaponModDamageType type = (WeaponModDamageType)rollForDamageType;
+
+
+                    WeaponModDamageType type = RollForDamageType();
                     Debug.Log("Damage type chosen is " + type.ToString());
+
                     switch (type)
                     {
                         case WeaponModDamageType.Physical:
-                            if (CheckWeaponHasDamageType(item, type))
+                            if (WeaponHelper.CheckWeaponHasDamageType(item, type))
                             {
                                 //add to the current damage 
                                 Debug.Log("Weapon already has this damage type NotYetImplemented");
@@ -161,72 +125,95 @@ namespace RandomItemStats
                             else
                             {
                                 Debug.Log("Adding Physical damage");
-                                AddWeaponDamage(item, DamageType.Types.Physical, rollQuality);
-                            }                                                     
-                            break;
+                                WeaponHelper.AddWeaponDamage(item, DamageType.Types.Physical, rollQuality);
+                                return CreateItemModFor<Weapon>(item, rollQuality, "physical", "damage");
+                            }
+                        break;
+
                         case WeaponModDamageType.Ethereal:
-                            if (CheckWeaponHasDamageType(item, type))
+                            if (WeaponHelper.CheckWeaponHasDamageType(item, type))
                             {
                                 Debug.Log("Weapon already has this damage type NotYetImplemented");
                             }
                             else
                             {
                                 Debug.Log("Adding Ethereal damage");
-                                AddWeaponDamage(item, DamageType.Types.Ethereal, rollQuality);
+                                WeaponHelper.AddWeaponDamage(item, DamageType.Types.Ethereal, rollQuality);
+                                return CreateItemModFor<Weapon>(item, rollQuality, "ethereal", "damage");
                             }
-                            break;
+                        break;
+
                         case WeaponModDamageType.Decay:
-                            if (CheckWeaponHasDamageType(item, type))
+                            if (WeaponHelper.CheckWeaponHasDamageType(item, type))
                             {
                                 Debug.Log("Weapon already has this damage type NotYetImplemented");
                             }
                             else
                             {
                                 Debug.Log("Adding Decay damage");
-                                AddWeaponDamage(item, DamageType.Types.Decay, rollQuality);
+                                WeaponHelper.AddWeaponDamage(item, DamageType.Types.Decay, rollQuality);
+                                return CreateItemModFor<Weapon>(item, rollQuality, "decay", "damage");
                             }
-                            break;
+                        break;
+
                         case WeaponModDamageType.Electric:
-                            if (CheckWeaponHasDamageType(item, type))
+                            if (WeaponHelper.CheckWeaponHasDamageType(item, type))
                             {
                                 Debug.Log("Weapon already has this damage type NotYetImplemented");
                             }
                             else
                             {
                                 Debug.Log("Adding Electric damage");
-                                AddWeaponDamage(item, DamageType.Types.Electric, rollQuality);
+                                WeaponHelper.AddWeaponDamage(item, DamageType.Types.Electric, rollQuality);
+                                return CreateItemModFor<Weapon>(item, rollQuality, "electric", "damage");
                             }
-                            break;
+                        break;
+
                         case WeaponModDamageType.Frost:
-                            if (CheckWeaponHasDamageType(item, type))
+                            if (WeaponHelper.CheckWeaponHasDamageType(item, type))
                             {
                                 Debug.Log("Weapon already has this damage type NotYetImplemented");
                             }
                             else
                             {
                                 Debug.Log("Adding Frost damage");
-                                AddWeaponDamage(item, DamageType.Types.Frost, rollQuality);
+                                WeaponHelper.AddWeaponDamage(item, DamageType.Types.Frost, rollQuality);
+                                return CreateItemModFor<Weapon>(item, rollQuality, "frost", "damage");
                             }
-                            break;
+                        break;
+
                         case WeaponModDamageType.Fire:
-                            if (CheckWeaponHasDamageType(item, type))
+                            if (WeaponHelper.CheckWeaponHasDamageType(item, type))
                             {
                                 Debug.Log("Weapon already has this damage type NotYetImplemented");
                             }
                             else
                             {
                                 Debug.Log("Adding Fire damage");
-                                AddWeaponDamage(item, DamageType.Types.Fire, rollQuality);
+                                WeaponHelper.AddWeaponDamage(item, DamageType.Types.Fire, rollQuality);
+                                return CreateItemModFor<Weapon>(item, rollQuality, "fire", "damage");
                             }
-                            break;
-                    }                 
+                        break;
+                    }
                 break;
+
                 case WeaponModType.SPEED:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(WeaponStats), weaponEquipStats, "AttackSpeed", rollQuality);
-                break;
+                    WeaponHelper.UpdateAttackSpeed(item, rollQuality);
+                return CreateItemModFor<Weapon>(item, rollQuality, "speed", "SPEED");
+
                 case WeaponModType.REACH:
-                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(WeaponStats), weaponEquipStats, "Reach", rollQuality);
-                    break;
+                    WeaponHelper.UpdateAttackReach(item, rollQuality);
+                return CreateItemModFor<Weapon>(item, rollQuality, "reach", "REACH");
+
+                case WeaponModType.DURABILITY:
+                    WeaponHelper.UpdateDurability(item, rollQuality);
+                    //outwardUTILS.ReflectionUpdateOrSetFloat(typeof(WeaponBaseData), weaponBaseData, "Durability", rollQuality);
+                return CreateItemModFor<Weapon>(item, rollQuality, "Durability", "DURABILITY");
+
+                case WeaponModType.IMPACT:
+                    WeaponHelper.UpdateImpact(item, rollQuality);
+                    //WeaponHelper.SetAttackStepKnockback(itemWeaponStats.Attacks, rollQuality);                
+                return CreateItemModFor<Weapon>(item, rollQuality, "Impact", "IMPACT");
             }
             return null;
         }
@@ -257,68 +244,24 @@ namespace RandomItemStats
             return valueToModBy;
         }
 
-        public static void AddWeaponDamage(Item item, DamageType.Types weaponDamageType, float damageAmount)
+        public static ItemMod CreateItemModFor<T>(Item item, float rollQuality, string mod_var, string mod_value_type)
         {
-            WeaponStats weaponStatComponent = item.GetComponent<WeaponStats>();
-            DamageType damageType = new DamageType(weaponDamageType, damageAmount);
-            weaponStatComponent.BaseDamage.Add(damageType);
-            SetAttackStepDamage(weaponStatComponent.Attacks, damageAmount);
+            ItemMod itemMod = new ItemMod(item);
+            itemMod.itemType = typeof(T);
+            itemMod.AddMod("mod_var", mod_var);
+            itemMod.AddMod("mod_value", rollQuality.ToString());
+            itemMod.AddMod("mod_value_type", mod_value_type);
+            return itemMod;
         }
 
-        public static void UpdateWeaponDamage(Item item, DamageType.Types weaponDamageType, float damageAmount)
+        public static WeaponModDamageType RollForDamageType()
         {
-            WeaponStats weaponStatComponent = item.GetComponent<WeaponStats>();
-            DamageType damageType = weaponStatComponent.BaseDamage.List.Find(x => x.Type == weaponDamageType);
-            SetAttackStepDamage(weaponStatComponent.Attacks, damageAmount);
-        }
+            int damageTypes = (int) WeaponModDamageType.COUNT - 1;
 
-        public static bool CheckWeaponHasDamageType(Item item, WeaponModDamageType weaponDamageType)
-        {
-            DamageType damageType = null;
+            int damageTypeRoll = UnityEngine.Random.Range(0, damageTypes);
 
-            switch (weaponDamageType)
-            {
-                case WeaponModDamageType.Physical:
-                    damageType = item.GetComponent<WeaponStats>().BaseDamage.List.Find(x => x.Type == DamageType.Types.Physical);
-                    break;
-                case WeaponModDamageType.Ethereal:
-                    damageType = item.GetComponent<WeaponStats>().BaseDamage.List.Find(x => x.Type == DamageType.Types.Ethereal);
-                    break;
-                case WeaponModDamageType.Decay:
-                    damageType = item.GetComponent<WeaponStats>().BaseDamage.List.Find(x => x.Type == DamageType.Types.Decay);
-                    break;
-                case WeaponModDamageType.Electric:
-                    damageType = item.GetComponent<WeaponStats>().BaseDamage.List.Find(x => x.Type == DamageType.Types.Electric);
-                    break;
-                case WeaponModDamageType.Frost:
-                    damageType = item.GetComponent<WeaponStats>().BaseDamage.List.Find(x => x.Type == DamageType.Types.Frost);
-                    break;
-                case WeaponModDamageType.Fire:
-                    damageType = item.GetComponent<WeaponStats>().BaseDamage.List.Find(x => x.Type == DamageType.Types.Fire);
-                    break;
-            }
-            return damageType != null ? true : false;
-        }
-
-        public static void SetAttackStepDamage(WeaponStats.AttackData[] attackData, float damageValue)
-        {
-            Debug.Log("Setting Attack Step Damage for each step.");
-            Debug.Log("  To " + damageValue);
-            //iterate each attack step in attack data
-            for (int i = 0; i < attackData.Length; i++)
-            {
-                var currentAttackStep = attackData[i];
-                currentAttackStep.Damage.Add(damageValue);
-            }
+            return (WeaponModDamageType)damageTypeRoll;
         }
     }
 
-    public enum RollQuality
-    {
-        UNCOMMON,
-        RARE,
-        EPIC,
-        LEGENDARY,
-        COUNT
-    }
 }
