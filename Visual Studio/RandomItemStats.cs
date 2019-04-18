@@ -54,7 +54,7 @@ namespace RandomItemStats
             foreach (var item in currentCharacter["items"].AsArray)
             {
                 var itemToUpdate = itemMan.GetItem(item.Value["item_UID"]);
-                var itemType = (ItemModType) Enum.Parse(typeof(ItemModType), item.Value["item_type"], true);
+                var itemType = (ItemModType)Enum.Parse(typeof(ItemModType), item.Value["item_type"], true);
                 var itemMods = item.Value["modifications"].AsArray;
                 Debug.Log("item");
                 Debug.Log(itemToUpdate);
@@ -65,6 +65,7 @@ namespace RandomItemStats
                 switch (itemType)
                 {
                     case ItemModType.WEAPON:
+                        ReInitaliseWeapons(itemToUpdate, itemMods);
                         break;
                     case ItemModType.ARMOR:
 
@@ -84,7 +85,7 @@ namespace RandomItemStats
                 Debug.Log("Reinit Armour Item " + item.Name);
 
                 EquipmentStats itemEquipStats = item.GetComponent<EquipmentStats>();
-
+                ItemStats itemStats = item.GetComponent<ItemStats>();
                 foreach (var thisModification in itemMods)
                 {
                     var modifyVar = thisModification.Value["mod_var"];
@@ -110,8 +111,8 @@ namespace RandomItemStats
                         case ArmourModType.COLD_PROTECTION:
                             outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
                             break;
-                        case ArmourModType.DAMAGE_RESISTANCE:                           
-                           // outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
+                        case ArmourModType.DAMAGE_RESISTANCE:
+                            // outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
                             break;
                         case ArmourModType.DAMAGE_PROTECTION:
                             //outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
@@ -122,6 +123,14 @@ namespace RandomItemStats
                         case ArmourModType.MANA_USE_MODIFIER:
                             outwardUTILS.ReflectionSetValue(typeof(EquipmentStats), itemEquipStats, modifyVar, modifyValue.AsFloat);
                             break;
+                        //case ArmourModType.DURABILITY:
+                        //    outwardUTILS.ReflectionSetValue(typeof(ItemStats), itemStats, modifyVar, modifyValue.AsFloat);
+                            
+                        //    break;
+                        //case ArmourModType.WEIGHT
+                        //    outwardUTILS.ReflectionSetValue(typeof(ItemStats), itemStats, modifyVar, modifyValue.AsFloat);
+                        //    break;
+
                     }
 
                 }
@@ -129,9 +138,46 @@ namespace RandomItemStats
             }
         }
 
-        public void ReInitaliseWeapons()
+        public void ReInitaliseWeapons(Item item, JSONArray itemMods)
         {
+            Debug.Log("Reinit Armour Item " + item.Name);
+            if (item != null)
+            {
+                Debug.Log("Reinit Armour Item " + item.Name);
 
+                EquipmentStats itemEquipStats = item.GetComponent<EquipmentStats>();
+
+                foreach (var thisModification in itemMods)
+                {
+                    var modifyVar = thisModification.Value["mod_var"];
+                    var modifyValue = thisModification.Value["mod_value"];
+                    var modifyVarType = (WeaponModType)Enum.Parse(typeof(WeaponModType), thisModification.Value["mod_value_type"], true);
+
+
+                    Debug.Log(modifyVarType);
+                    switch (modifyVarType)
+                    {
+                        case WeaponModType.DAMAGE:
+                            DamageType.Types type = (DamageType.Types)Enum.Parse(typeof(DamageType.Types), thisModification.Value["mod_var"], true);
+                            WeaponHelper.AddWeaponDamage(item, type, modifyValue);
+                            break;
+                        case WeaponModType.IMPACT:
+                            WeaponHelper.UpdateImpact(item, modifyValue);
+                            break;
+                        case WeaponModType.DURABILITY:
+                            WeaponHelper.UpdateDurability(item, modifyValue);
+                            break;
+                        case WeaponModType.SPEED:
+                            WeaponHelper.UpdateAttackSpeed(item, modifyValue);
+                            break;
+                        case WeaponModType.REACH:
+                            WeaponHelper.UpdateAttackReach(item, modifyValue);
+                            break;
+                    }
+
+                }
+
+            }
         }
     }
 }

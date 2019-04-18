@@ -15,7 +15,7 @@ namespace RandomItemStats
             int statTypes = (int)ArmourModType.COUNT - 1;
             int rollStatType = UnityEngine.Random.Range(0, statTypes);
             ArmourModType statTypeEnum = (ArmourModType)rollStatType;
-            int rollQuality = RollForQuality();
+            int rollQuality = RollHelper.RollForQuality();
             Debug.Log("Armor Stat Chosen is " + statTypeEnum.ToString() + " value is " + rollQuality);
 
             //Component References
@@ -62,7 +62,7 @@ namespace RandomItemStats
                 return CreateItemModFor<Armor>(item, rollQuality, "m_staminaUsePenalty", "STAMINA_USE_MODIFIER");
 
                 case ArmourModType.DAMAGE_PROTECTION:
-                    WeaponModDamageType chosenType = RollForDamageType();
+                    WeaponModDamageType chosenType = RollHelper.RollForDamageType();
 
 
                 break;
@@ -70,6 +70,10 @@ namespace RandomItemStats
                 case ArmourModType.DAMAGE_RESISTANCE:
 
                 break;
+
+                case ArmourModType.DURABILITY:
+                    outwardUTILS.ReflectionUpdateOrSetFloat(typeof(ItemStats), itemStats, "MaxDurability", -rollQuality);
+                return CreateItemModFor<Armor>(item, rollQuality, "MaxDurability", "DURABILITY");
 
                 default:
                     Debug.Log("Unimplemented Type");
@@ -93,7 +97,7 @@ namespace RandomItemStats
 
             WeaponModType statTypeEnum = (WeaponModType)rollStatType;
 
-            int rollQuality = RollForQuality();
+            int rollQuality = RollHelper.RollForQuality();
             Debug.Log("Weapon Stat Chosen is " + statTypeEnum.ToString() + " value is " + rollQuality);
 
 
@@ -111,7 +115,7 @@ namespace RandomItemStats
                 case WeaponModType.DAMAGE:
 
 
-                    WeaponModDamageType type = RollForDamageType();
+                    WeaponModDamageType type = RollHelper.RollForDamageType();
                     Debug.Log("Damage type chosen is " + type.ToString());
 
                     switch (type)
@@ -218,32 +222,6 @@ namespace RandomItemStats
             return null;
         }
 
-        public static int RollForQuality()
-        {
-            int rollTypes = (int)RollQuality.COUNT - 1;
-
-            int rollRarity = UnityEngine.Random.Range(0, rollTypes);
-            RollQuality rollQualityEnum = (RollQuality)rollRarity;
-            var valueToModBy = 0;
-
-            switch (rollQualityEnum)
-            {
-                case RollQuality.UNCOMMON:
-                    valueToModBy = 10;
-                    break;
-                case RollQuality.RARE:
-                    valueToModBy = 15;
-                    break;
-                case RollQuality.EPIC:
-                    valueToModBy = 27;
-                    break;
-                case RollQuality.LEGENDARY:
-                    valueToModBy = 35;
-                    break;
-            }
-            return valueToModBy;
-        }
-
         public static ItemMod CreateItemModFor<T>(Item item, float rollQuality, string mod_var, string mod_value_type)
         {
             ItemMod itemMod = new ItemMod(item);
@@ -254,14 +232,7 @@ namespace RandomItemStats
             return itemMod;
         }
 
-        public static WeaponModDamageType RollForDamageType()
-        {
-            int damageTypes = (int) WeaponModDamageType.COUNT - 1;
 
-            int damageTypeRoll = UnityEngine.Random.Range(0, damageTypes);
-
-            return (WeaponModDamageType)damageTypeRoll;
-        }
     }
 
 }

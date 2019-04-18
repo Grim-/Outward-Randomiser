@@ -12,7 +12,6 @@ namespace RandomItemStats
         ARMOR
     }
 
-    //ARMOURBASE_DATA or EQUIPMENTSTATS
     public enum ArmourModType
     {
         SPEED,
@@ -29,14 +28,7 @@ namespace RandomItemStats
         MANA_USE_MODIFIER,
         COUNT
     }
-    //WEAPONBASEDATA
-    //DAMAGE,
-    //SPEED,
-    //REACH,
-    //IMPACT,
-    //DURA
-    //
-    //COUNT
+
     public enum WeaponModType
     {
         DAMAGE,
@@ -65,6 +57,7 @@ namespace RandomItemStats
         RARE,
         EPIC,
         LEGENDARY,
+        CURSED,
         COUNT
     }
 }

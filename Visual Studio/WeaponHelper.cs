@@ -85,7 +85,7 @@ namespace RandomItemStats
         public static void UpdateDurability(Item item, float newDurabilityValue)
         {
             
-            ItemStats itemStatsComp = item.GetComponent<WeaponStats>();
+            ItemStats itemStatsComp = item.GetComponent<ItemStats>();
             var oldDuraValue = itemStatsComp.MaxDurability;
             var newValue = (int)oldDuraValue + (int)newDurabilityValue;
             Debug.Log("Setting Durability from " + oldDuraValue + " to " + newValue);
@@ -167,7 +167,7 @@ namespace RandomItemStats
             WeaponStats weaponStatsComp = item.GetComponent<WeaponStats>();
             var oldValue = weaponStatsComp.StamCost;
             Debug.Log("Setting Stamina Cost from " + oldValue + " to " + newStaminaCost);
-            weaponStatsComp.Impact = oldValue + newStaminaCost;
+            weaponStatsComp.StamCost = oldValue + newStaminaCost;
             SetAttackStepStaminaCost(weaponStatsComp.Attacks, newStaminaCost);
         }
 

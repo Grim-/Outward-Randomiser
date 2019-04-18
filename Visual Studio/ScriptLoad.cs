@@ -13,6 +13,8 @@ namespace RandomItemStats
     {
         private List<ItemMod> modifiedStuff = new List<ItemMod>();
 
+        private List<string> openedChests = new List<string>();
+
         public RandomItemStats ris;
 
         private SimpleJSON.JSONNode currentCharSave;
@@ -76,50 +78,63 @@ namespace RandomItemStats
         private void chestActivateHook(On.InteractionOpenChest.orig_OnActivate orig, InteractionOpenChest self)
         {
             orig(self);
-            Debug.Log("this should fire when a chest is opened");
+            ItemContainer chestContainer = outwardUTILS.ReflectionGetValue<ItemContainer>(typeof(InteractionOpenChest), self, "m_chest");
+            Debug.Log(chestContainer.UID);
 
-            ItemContainer chestContainer = outwardUTILS.ReflectionGetValue<ItemContainer>(typeof(InteractionOpenChest), self, "m_chest");         
-            Debug.Log(chestContainer.IsInWorld);
-            Debug.Log(chestContainer.ItemCount);
-            List<Weapon> weapons = chestContainer.GetItemOfType<Weapon>();
-
-            Debug.Log("Weapon in chest count");
-            Debug.Log(weapons.Count);
-
-            List<Armor> armour = chestContainer.GetItemOfType<Armor>();
-
-            Debug.Log("Armor in chest count");
-            Debug.Log(armour.Count);
-
-
-            if (weapons.Count > 0)
+            if (openedChests.Contains(chestContainer.UID))
             {
-                var itemMod = Itemreroller.ReRollWeapon(weapons[0]);
-                if (itemMod != null)
-                {
-                    modifiedStuff.Add(itemMod);
-                }
-                else
-                {
-                    Debug.Log("A Null ItemMod can't be added to a list");
-                }
+                Debug.Log("Chest Already been looted");
             }
-
-            if (armour.Count > 0)
+            else
             {
-                var itemMod = Itemreroller.ReRollArmour(armour[0]);
+                Debug.Log("this should fire when a chest is opened");
 
-                if (itemMod != null)
-                {
-                    modifiedStuff.Add(itemMod);
-                }
-                else
-                {
-                    Debug.Log("A Null ItemMod can't be added to a list");
-                }
                 
+                Debug.Log(chestContainer.IsInWorld);
+                Debug.Log(chestContainer.ItemCount);
+                List<Weapon> weapons = chestContainer.GetItemOfType<Weapon>();
+
+                Debug.Log("Weapon in chest count");
+                Debug.Log(weapons.Count);
+
+                List<Armor> armour = chestContainer.GetItemOfType<Armor>();
+
+                Debug.Log("Armor in chest count");
+                Debug.Log(armour.Count);
+
+
+                if (weapons.Count > 0)
+                {
+                    var itemMod = Itemreroller.ReRollWeapon(weapons[0]);
+                    if (itemMod != null)
+                    {
+                        modifiedStuff.Add(itemMod);
+                    }
+                    else
+                    {
+                        Debug.Log("A Null ItemMod can't be added to a list");
+                    }
+                }
+
+                if (armour.Count > 0)
+                {
+                    var itemMod = Itemreroller.ReRollArmour(armour[0]);
+
+                    if (itemMod != null)
+                    {
+                        modifiedStuff.Add(itemMod);
+                    }
+                    else
+                    {
+                        Debug.Log("A Null ItemMod can't be added to a list");
+                    }
+
+                }
+
+                openedChests.Add(chestContainer.UID);
             }
 
+            
         }
 
     }
